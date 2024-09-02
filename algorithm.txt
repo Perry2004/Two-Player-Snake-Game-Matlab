@@ -1,0 +1,83 @@
+Pseudocode for Slither Game algorithm
+
+clear workspace 
+
+Initialize variables 
+    create simpleGameEngine object 
+    create the board
+    load sprites 
+    load sound effect 
+
+set difficulty level based on user input
+    loop until user provides valid input 
+draw board with snake and apple at initial position
+
+start game loop 
+    start frame loop 
+        start game timer
+
+        clear graphics from previous frame
+
+        test snake conditions
+
+            if the snakes will hit itself
+                break
+            if the snakes will collide
+                break
+            if the snakes will hit the wall
+                break
+        
+        update snake position based on user input
+            'w' = 1up
+            's' = 1down
+            'a' = 1left
+            'd' = 1right
+            '<-' = 2left
+            '->' = 2right
+            'up' = 2up
+            'down' = 2down
+        
+        test if any of the snake eats the apple
+            if snake1 eats the apple
+                increase snake1 length
+                increase score
+                generate new apple
+            if snake2 eats the apple
+                increase snake2 length
+                increase score
+                generate new apple
+
+        update snake body positions 
+            append new head position to snake body
+            keep the length of snake body equal to the length of snake
+        
+        generate new apple if apple is eaten
+            if the apple is generated on snake body
+                generate new apple on new random position 
+            update last apple position
+            reset apple generation counter
+
+        draw snakes and apple to the board 
+
+        pause game timer until the next frame
+    end of frame loop
+    
+    play user death sound effect
+    display game over message
+
+    pause before restarting the game
+
+    ask if the user wants to play again
+        if yes
+            reset game variables
+            restart game loop
+        if no
+            break 
+end of game loop
+
+Event listeners: 
+on bgm music end
+    play bgm music again
+on user press key
+    if key is valid
+        update user input

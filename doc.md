@@ -1,0 +1,106 @@
+# Slither Game Technical Documentation
+## Variables and Constants
+- `initTimer` - the initial timer that starts as soon as the game starts. It is used to monitor the initialization time and first `drawScene()` call.
+- `engine` - the `simpleGameEngine` object that is used to draw the game.
+- `player` - the audio player object that is used to play the game's background music.
+- `blank` - the image id of the sprite sheet for blank blocks.
+- `snake1` - the image id of the sprite sheet for snake1 head blocks.
+    - `snake1left` - the image id of the sprite sheet for snake1 head blocks facing left.
+    - `snake1right` - the image id of the sprite sheet for snake1 head blocks facing right.
+    - `snake1up` - the image id of the sprite sheet for snake1 head blocks facing up.
+    - `snake1down` - the image id of the sprite sheet for snake1 head blocks facing down.
+- `snake2` - the image id of the sprite sheet for snake2 head blocks.
+    - `snake2left` - the image id of the sprite sheet for snake2 head blocks facing left.
+    - `snake2right` - the image id of the sprite sheet for snake2 head blocks facing right.
+    - `snake2up` - the image id of the sprite sheet for snake2 head blocks facing up.
+    - `snake2down` - the image id of the sprite sheet for snake2 head blocks facing down.
+- `snake1Body` - the image id of the sprite sheet for snake1 body blocks.
+- `snake2Body` - the image id of the sprite sheet for snake2 body blocks.
+- `apple` - the image id of the sprite sheet for apple blocks.
+- `board` - a 30x30 array that stores the current state of the game board.
+- `snake1Length` - the length of snake1. Default is 1.
+- `snake2Length` - the length of snake2. Default is 1.
+- `snake1PosR` - the row position of snake1 head. Default is 1.
+- `snake1PosC` - the column position of snake1 head. Default is 1.
+- `snake2PosR` - the row position of snake2 head. Default is 30.
+- `snake2PosC` - the column position of snake2 head. Default is 30.
+- `snake1Dir` - global. the direction of snake1. Default is `'r'` (right). Possible values are `'u'` (up), `'d'` (down), `'l'` (left), `'r'` (right). 
+- `snake2Dir` - global. the direction of snake2. Default is `'l'` (left). Possible values are `'u'` (up), `'d'` (down), `'l'` (left), `'r'` (right).
+- `snake1LastPosR` - the row position of snake1 head in the last frame.
+- `snake1LastPosC` - the column position of snake1 head in the last frame.
+- `snake2LastPosR` - the row position of snake2 head in the last frame.
+- `snake2LastPosC` - the column position of snake2 head in the last frame.
+- `snake1PrevPosR` - an array of the length of `snake1Length` that stores the row positions of snake1 body positions from previous frames.
+- `snake1PrevPosC` - an array of the length of `snake1Length` that stores the column positions of snake1 body positions from previous frames.
+- `snake2PrevPosR` - an array of the length of `snake2Length` that stores the row positions of snake2 body positions from previous frames.
+- `snake2PrevPosC` - an array of the length of `snake2Length` that stores the column positions of snake2 body positions from previous frames.
+- `lastApplePos` - the array index of the last apple position. 
+- `APPLE_REFRESH_INTERVAL` - constant. the interval between the generation of two apples. 
+- `appleRefreshCounter` - the counter that counts the number of frames since the last apple was generated.
+- `refreshInterval` - the time interval that decides the speed of the game. 
+- `key` - the key pressed by the user.
+- `timer` - the timer that restarts in each frame. It is used to keep constant frame rate.
+- `computationTime` - the time taken to compute the next frame. Uss `refreshInterval - computationTime` to determine pause time.
+- `snakeWithApple` - the snake that has eaten the apple. Possible values are `'snake1'` and `'snake2'`.
+- `playerDeath` - the player object that plays the death sound effect.
+
+## Functions 
+### Functions from `simpleGameEngine.m`
+- `simpleGameEngine(sprites_fname, sprite_height, sprite_width, zoom, background_color)` - the constructor of the `simpleGameEngine` object.
+  - Arguments: 
+    - `sprites_fname` - the file name of the sprite sheet.
+    - `sprite_height` - the height of each sprite.
+    - `sprite_width` - the width of each sprite.
+    - `zoom` - the zoom factor of the game. 
+    - `background_color` - the \[r, g, b\] color array of the background color.
+-  `drawScene` - the function that draws the game scene.
+-  `getKeyboardInput` - the function that gets the keyboard input from the user. Blocks the program until a key is pressed.
+  -  Returns:
+      -  `key` - the key pressed by the user.
+### User-defined Functions
+- `willHitWall(snakePosR, snakePosC, snakeDir)` - checks if the snake will hit the wall in the next frame.
+  - Arguments:
+    - `snakePosR` - the row position of the snake head.
+    - `snakePosC` - the column position of the snake head.
+    - `snakeDir` - the direction of the snake.
+  - Returns:
+    - `true` if the snake will hit the wall in the next frame.
+    - `false` otherwise.
+- `willHitSelf(snakePosR, snakePosC, snakeDir, snakeLength, snakePrevPosR, snakePrevPosC)` - checks if the snake will hit itself in the next frame.
+  - Arguments:
+    - `snakePosR` - the row position of the snake head.
+    - `snakePosC` - the column position of the snake head.
+    - `snakeDir` - the direction of the snake.
+    - `snakeLength` - the length of the snake.
+    - `snakePrevPosR` - an array of the length of `snakeLength` that stores the row positions of snake body positions from previous frames.
+    - `snakePrevPosC` - an array of the length of `snakeLength` that stores the column positions of snake body positions from previous frames.
+  - Returns:
+    - `true` if the snake will hit itself in the next frame.
+    - `false` otherwise.
+- `willHitOtherSnake` - checks if the snake will hit the other snake in the next frame.
+  - Arguments:
+    - `snakePosR` - the row position of the snake head.
+    - `snakePosC` - the column position of the snake head.
+    - `snakeDir` - the direction of the snake.
+    - `snakeLength` - the length of the snake.
+    - `snakePrevPosR` - an array of the length of `snakeLength` that stores the row positions of snake body positions from previous frames.
+    - `snakePrevPosC` - an array of the length of `snakeLength` that stores the column positions of snake body positions from previous frames.
+    - `otherSnakePosR` - the row position of the other snake head.
+    - `otherSnakePosC` - the column position of the other snake head.
+    - `otherSnakeLength` - the length of the other snake.
+    - `otherSnakePrevPosR` - an array of the length of `otherSnakeLength` that stores the row positions of other snake body positions from previous frames.
+    - `otherSnakePrevPosC` - an array of the length of `otherSnakeLength` that stores the column positions of other snake body positions from previous frames.
+  - Returns:
+    - `'snake1'` if snake1 will hit snake2 in the next frame.
+    - `'snake2'` if snake2 will hit snake1 in the next frame.
+    - `false` otherwise.
+- `changeDir(~, event)` - changes the direction of the snake based on keyboard input. Used as a callback function for `KeyPressFcn`. 
+  - Arguments:
+    - `~` - unused.
+    - `event` - the event object that contains the key pressed by the user. `event.Key` is the key pressed by the user.
+  - Updates:
+    - `snake1Dir` - if the key pressed by the user is `'w'`, `'a'`, `'s'`, or `'d'`.
+    - `snake2Dir` - if the key pressed by the user is `'uparrow'`, `'leftarrow'`, `'downarrow'`, or `'rightarrow'`.
+
+## References
+- [Matlab Documentation](https://www.mathworks.com/help/matlab/)
